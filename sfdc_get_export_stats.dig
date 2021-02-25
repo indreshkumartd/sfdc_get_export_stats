@@ -1,0 +1,34 @@
+timezone: UTC
+
+_export:
+  !include : 'config/params_sfdc.yml'
+
++src:
+  _parallel: true
+  for_each>:
+    list: ${sfdc_objs}
+  _do:
+    +start_task:
+      +qb_agg_export_log_sfdc:
+        td_ddl>:
+        create_tables: ["${list.src.qb_agg_export_log_sfdc}"]
+        database: ${list.src.logging_db}
+
+      +get_stats_from_sfdc:
+        docker:
+          image: "digdag/digdag-python:3.7"
+        py>: python_script.sfdc_get_export_stats.main
+        _env:
+          TD_API_KEY: ${secret:td.apikey1}
+          endpoint: 'https://api.treasuredata.com'
+          dest_db:  ${list.src.logging_db}
+          dest_tbl: ${list.src.qb_agg_export_log_sfdc}
+          if_exists: ${list.src.td_tbl_if_exists}
+          #SFDC Details
+          client_id: ${secret:sfdc.client_id}
+          client_secret: ${secret:sfdc.client_secret}
+          username: ${secret:sfdc.username}
+          password: ${secret:sfdc.password}
+          object_name:  ${list.src.object_name}
+          createdById: ${list.src.createdById}
+          api_base_url: ${list.src.api_base_url}

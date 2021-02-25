@@ -1,0 +1,22 @@
+sfdc_objs:
+
+- data:
+  src:
+    object_name: 'SFDC Object Name' # Please provide your SFDC Object Name
+    logging_db: reporting # make sure reporting DB is already Created before running wf
+    qb_agg_export_log_sfdc: qb_agg_export_log_sfdc
+    td_tbl_if_exists: append
+    createdById: "Please provide your CreatedById" # This is for TD, Please provide your CreatedById
+    api_base_url: 'API URL Goes Here' # Please provide your BASE URL
+
+#################################################################
+
+- data:
+  src:
+    object_name: 'SFDC Object Name' # Please provide your SFDC Object Name
+    logging_db: reporting # make sure reporting DB is already Created before running wf
+    qb_agg_export_log_sfdc: qb_agg_export_log_sfdc
+    td_tbl_if_exists: append
+    createdById: "Please provide your CreatedById" # This is for TD, Please provide your CreatedById
+    api_base_url: 'API URL Goes Here' # Please provide your BASE URL
+#################################################################
