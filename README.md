@@ -2,8 +2,8 @@ The TD SFDC connector to export data currently doesn’t provide a way to log ho
 
 
 ## Prerequisites
-Download td cli
-Basic Knowledge of Treasure Workflow's syntax
+- Download td cli
+- Basic Knowledge of Treasure Workflow's syntax
 
 ## How to run this example
 You can copy or clone this directory.
@@ -15,7 +15,7 @@ Then, push the workflow with td wf push command.
 
 Before running this workflow, we need to set secrets with `td wf secrets` command.
 Example to set secrets:
-- `td wf secrets --project sfdc_get_export_stats --set sfdc.client_id --set sfdc.client_secret --set sfdc.username --set sfdc.password --set td.apikey1 --set sfdc.security_token`
+- `td wf secrets --project sfdc_get_export_stats --set td.sfdc.client_id --set td.sfdc.client_secret --set td.sfdc.username --set td.sfdc.password --set td.apikey1 --set td.sfdc.security_token`
 
 
 Then, let's start running the example workflow.
