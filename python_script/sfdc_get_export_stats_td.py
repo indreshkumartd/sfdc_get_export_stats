@@ -27,9 +27,12 @@ def main():
     object_name = os.getenv('object_name')
     createdById = os.getenv('createdById')
     base_url = os.getenv('api_base_url')
+    import_all_jobs = os.getenv('import_all_jobs')
+    get_jobs_by_date = os.getenv('get_jobs_by_date')
     # SFDC Details
     client_id = os.getenv('client_id')
     client_secret = os.getenv('client_secret')
+    security_token = os.getenv('security_token')
     username = os.getenv('username')
     password = os.getenv('password')
 
@@ -42,7 +45,7 @@ def main():
             'client_id': client_id,
             'client_secret': client_secret,
             'username': username,
-            'password': password}
+            'password': password+security_token}
             files = [
             ]
 
@@ -55,7 +58,7 @@ def main():
             # print(response.text)
             if response.status_code == 200:
                 _access_token = response.json().get('access_token')
-                print(_access_token)
+                # print(_access_token)
                 return _access_token
             print('Something went wrong: response.status_code = ', response.status_code)
             return None
@@ -68,12 +71,16 @@ def main():
     def get_td_td_jobid(object_name, createdById, _access_token):
         # td_jobid = '750P0000004xlkaIAA'
         try:
-            today_date = (datetime.now()).strftime('%Y-%m-%d')
+            if not get_jobs_by_date:
+                today_date = (datetime.now()).strftime('%Y-%m-%d')
+            else:
+                today_date = get_jobs_by_date
+            # today_date = '2021-02-24'
             print(f'Getting the td_jobid for object: {object_name}, createdById: {createdById}, Date: {today_date}')
             url = f"{base_url}/data/v51.0/jobs/ingest/"
             payload = {}
             headers = {
-              'Authorization': f'Bearer {password}{_access_token}'
+              'Authorization': f'Bearer {_access_token}'
             }
             response = requests.request("GET", url, headers=headers, data=payload)
             if response.status_code == 200:
@@ -86,8 +93,8 @@ def main():
                     # print(item)
                     for key, val in item.items():
                         # print(key, val)
-                        if item.get("createdById") == createdById and today_date in item.get("createdDate") and item.get(
-                                "object") == object_name: #and item.get('id') == '750P0000004xlkaIAA'
+                        if (item.get("createdById") == createdById and today_date in item.get("createdDate") and item.get(
+                                "object") == object_name) or (import_all_jobs == 1 ): #and item.get('id') == '750P0000004xlkaIAA'
                             # print(item)
                             td_jobid = item.get('id')
                             # print(td_jobid, item.get("createdDate"))
@@ -110,10 +117,10 @@ def main():
     # get the result of td_jobid
     def get_result_of_td_jobid(td_jobid, _access_token):
         if td_jobid:
-            url = f"{base_url}/data/v51.0/jobs/query/{td_jobid}/"
+            url = f"{base_url}/data/v51.0/jobs/ingest/{td_jobid}/"
             payload = {}
             headers = {
-              'Authorization': f'Bearer {password}{_access_token}'
+              'Authorization': f'Bearer {_access_token}'
             }
             try:
                 response = requests.request("GET", url, headers=headers, data=payload)
@@ -140,10 +147,12 @@ def main():
             if td_jobid:
                 for jobid in td_jobid:
                     res_dict = get_result_of_td_jobid(jobid, _access_token)
-                    df = pd.DataFrame.from_dict(json_normalize(res_dict), orient='columns')
-                    # print(df.to_string())
-                    final_df = final_df.append(df, sort=False)
-
+                    if res_dict:
+                        df = pd.DataFrame.from_dict(json_normalize(res_dict), orient='columns')
+                        # print(df.to_string())
+                        final_df = final_df.append(df, sort=False)
+                    else:
+                        print('No Result for job_id: ', jobid)
                 # Calling function to connect to TD DB
                 client = connect_td_db(apikey, endpoint, dest_db)
                 # call function to load the data to td

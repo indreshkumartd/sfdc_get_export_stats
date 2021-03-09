@@ -2,21 +2,26 @@ sfdc_objs:
 
 - data:
   src:
-    object_name: 'SFDC Object Name' # Please provide your SFDC Object Name
-    logging_db: reporting # make sure reporting DB is already Created before running wf
+    object_name: Contact # Please provide your SFDC Object Name
+    logging_db: test_db_ind # make sure reporting DB is already Created before running wf
     qb_agg_export_log_sfdc: qb_agg_export_log_sfdc
     td_tbl_if_exists: append
-    createdById: "Please provide your CreatedById" # This is for TD, Please provide your CreatedById
-    api_base_url: 'API URL Goes Here' # Please provide your BASE URL
-
+    createdById: 00541000005eIj0AAE # This is for TD, Please provide your CreatedById
+    api_base_url: 'https://na96.salesforce.com/services' # Please provide your BASE URL
+    import_all_jobs: 1
+    # If get_jobs_by_date is not given then current day jobs info will be fetched. Date formate is yyyy-mm-dd
+    get_jobs_by_date:
 #################################################################
-
-- data:
-  src:
-    object_name: 'SFDC Object Name' # Please provide your SFDC Object Name
-    logging_db: reporting # make sure reporting DB is already Created before running wf
-    qb_agg_export_log_sfdc: qb_agg_export_log_sfdc
-    td_tbl_if_exists: append
-    createdById: "Please provide your CreatedById" # This is for TD, Please provide your CreatedById
-    api_base_url: 'API URL Goes Here' # Please provide your BASE URL
-#################################################################
+#
+# - data:
+#   src:
+#     object_name: Contact # Please provide your SFDC Object Name
+#     logging_db: test_db_ind # make sure reporting DB is already Created before running wf
+#     qb_agg_export_log_sfdc: qb_agg_export_log_sfdc
+#     td_tbl_if_exists: append
+#     createdById: 00541000005eIj0AAE # This is for TD, Please provide your CreatedById
+#     api_base_url: 'https://na96.salesforce.com/services' # Please provide your BASE URL
+#     import_all_jobs: 1
+#     # If get_jobs_by_date is not given then current day jobs info will be fetched. Date formate is yyyy-mm-dd
+#     get_jobs_by_date:
+# #################################################################

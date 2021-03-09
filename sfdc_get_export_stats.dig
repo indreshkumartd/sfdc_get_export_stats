@@ -17,7 +17,7 @@ _export:
       +get_stats_from_sfdc:
         docker:
           image: "digdag/digdag-python:3.7"
-        py>: python_script.sfdc_get_export_stats.main
+        py>: python_script.sfdc_get_export_stats_td.main
         _env:
           TD_API_KEY: ${secret:td.apikey1}
           endpoint: 'https://api.treasuredata.com'
@@ -25,10 +25,13 @@ _export:
           dest_tbl: ${list.src.qb_agg_export_log_sfdc}
           if_exists: ${list.src.td_tbl_if_exists}
           #SFDC Details
-          client_id: ${secret:sfdc.client_id}
-          client_secret: ${secret:sfdc.client_secret}
-          username: ${secret:sfdc.username}
-          password: ${secret:sfdc.password}
+          client_id: ${secret:td.sfdc.client_id}
+          client_secret: ${secret:td.sfdc.client_secret}
+          security_token: ${secret:td.sfdc.security_token}
+          username: ${secret:td.sfdc.username}
+          password: ${secret:td.sfdc.password}
           object_name:  ${list.src.object_name}
           createdById: ${list.src.createdById}
           api_base_url: ${list.src.api_base_url}
+          import_all_jobs: ${list.src.import_all_jobs}
+          get_jobs_by_date: ${list.src.get_jobs_by_date}
