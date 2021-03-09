@@ -94,7 +94,7 @@ def main():
                     for key, val in item.items():
                         # print(key, val)
                         if (item.get("createdById") == createdById and today_date in item.get("createdDate") and item.get(
-                                "object") == object_name) or (import_all_jobs == 1 ): #and item.get('id') == '750P0000004xlkaIAA'
+                                "object") == object_name) or (int(import_all_jobs) == 1 ): #and item.get('id') == '750P0000004xlkaIAA'
                             # print(item)
                             td_jobid = item.get('id')
                             # print(td_jobid, item.get("createdDate"))
